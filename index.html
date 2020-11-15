@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Tasks</title>
+    <script language="javascript" type="text/javascript" src="main.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.0.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.2/firebase-auth.js"></script>
+
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyCv9m_qVBm-U9NdQ79XkM5boAIgjHaYG5I",
+        authDomain: "tasks-f6e34.firebaseapp.com",
+        databaseURL: "https://tasks-f6e34.firebaseio.com",
+        projectId: "tasks-f6e34", 
+        storageBucket: "tasks-f6e34.appspot.com",
+        messagingSenderId: "950763773024",
+        appId: "1:950763773024:web:cad393dcb4da7d35b23705",
+        measurementId: "G-DL9153JF58"
+      };
+
+      firebase.initializeApp(firebaseConfig);
+
+      firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+    </script>
+  </head>
+
+  <body>
+    <p style="font-size:175%;">Incercare de SPA in js pur pt ca ma pis pe ele librarii de frontend</p>
+    <div id="app"><br>test</br></div>
+
+
+  </body>
+</html>
