@@ -1,8 +1,17 @@
-<div id='text'>bravo ai intrat in contu tau, tu esti </div>
-<button id="signout">iesi afara</button>
-<input id="task"></input>
-<button id="buton">adauga task</button>
-<table class="table table-bordered" style="width: 75%; margin: auto;">
+<div class="fadeInDown" style="padding-bottom: 1cm;">
+<div style="text-align: center; align-items: center;">
+    <h1 id="titlu" style="display: inline; padding-top: 1cm;">Task-urile pentru azi </h1> <button id="plus" class="btn btn-sm" style="margin-bottom: 1%;">+</button> <button id="minus" class="btn btn-sm" style="margin-bottom: 1%;">-</button>
+
+</div>
+
+<div class="input-group mb-3" style="width: 75%; margin: auto;">
+    <input id="task" type="text" class="form-control" placeholder="Descrie ce trebuie sa faci azi" aria-label="Descriere task" aria-describedby="basic-addon2">
+    <div class="input-group-append">
+      <button id="addTask" class="btn btn-info" type="button">Adauga</button>
+    </div>
+  </div>
+
+<table id="table" class="table table-bordered" style="display: none; width: 75%; margin: auto;">
     <thead>
         <tr>
           <th scope="col">Descriere</th>
@@ -13,3 +22,8 @@
 
     </tbody>
 </table>
+<br/>
+
+<button id="signout" class="btn btn-outline-danger" style="margin-left: 90%;">Logout</button> 
+
+</div>

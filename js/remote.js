@@ -20,6 +20,7 @@ function add_task() {
 function show_tasks(template) {
     document.getElementById('taskuri').innerHTML = ""
     db.collection(user.uid)
+    .where("zi", "==", zi)
     .get()
     .then(function(querySnapshot) {
         tasks_div = document.getElementById("taskuri")
@@ -57,7 +58,7 @@ function show_tasks(template) {
                 }).then(get_template)
             }
         });
-
+        document.getElementById('table').style.display = "block"
     })
     .catch(function(error) {
         console.log("eroare ", error)
@@ -76,4 +77,24 @@ function get_template() {
   
     xhttp.open('GET', "/views/task.html", true)
     xhttp.send()
+}
+
+function update_title(zi) {
+    luna = [
+        "ianuarie", "februarie", "martie", "aprilie", "mai", "iunie", "iulie", "august", "septembrie", "octombrie", "noiembrie", "decebrie"
+    ]
+    elem = document.getElementById('titlu')
+    txt = "Task-urile pentru "
+
+    if (d.getDOY() == zi-1) txt += "maine"
+    else if (d.getDOY() == zi) txt += "azi"
+    else if (zi == d.getDOY() - 1) txt += "ieri"
+    else {
+        var date = new Date(2020, 0)
+        day = new Date(date.setDate(zi))
+        
+        txt += day.getDate() + " " + luna[day.getMonth()] + " "
+    }
+
+    elem.innerText = txt
 }

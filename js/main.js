@@ -28,9 +28,6 @@ function reg() {
   pass = document.getElementById("pass").value
 
   firebase.auth().createUserWithEmailAndPassword(mail, pass)
-    .then(function () {
-      load('home')
-    })
     .catch(function(error) {
       var errorCode = error.code;
       var errorMessage = error.message;
@@ -44,9 +41,6 @@ function login() {
   pass = document.getElementById("pass").value
 
   firebase.auth().signInWithEmailAndPassword(mail, pass)
-    .then(function () {
-      load('home')
-    })
     .catch(function(error) {
       var errorCode = error.code;
       var errorMessage = error.message;
@@ -77,24 +71,4 @@ function load(name) {
 function setError(err) {
   if (!err) err = "cv nu i bine frate"
   document.getElementById('err').innerHTML = err
-}
-
-Date.prototype.isLeapYear = function() {
-  var year = this.getFullYear();
-  if((year & 3) != 0) return false;
-  return ((year % 100) != 0 || (year % 400) == 0);
-};
-
-// Get Day of Year
-Date.prototype.getDOY = function() {
-  var dayCount = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
-  var mn = this.getMonth();
-  var dn = this.getDate();
-  var dayOfYear = dayCount[mn] + dn;
-  if(mn > 1 && this.isLeapYear()) dayOfYear++;
-  return dayOfYear;
-};
-
-Element.prototype.remove = function() {
-  this.parentElement.removeChild(this);
 }
