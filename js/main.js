@@ -1,6 +1,6 @@
 pages = {
-  'auth': ["/auth.html", start],
-  'home': ["/test.html", numeste]
+  'auth': ["/views/auth.html", start],
+  'home': ["/views/test.html", numeste]
 }
 
 window.onload = function() {
