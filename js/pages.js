@@ -16,8 +16,8 @@ function init_tasks() {
         firebase.auth().signOut()
     }
 
+    get_template()
 
     document.getElementById('buton').onclick = add_task
-    document.getElementById('arata').onclick = get_template
 
 }

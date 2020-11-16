@@ -25,9 +25,16 @@ function show_tasks(template) {
         tasks_div = document.getElementById("taskuri")
         querySnapshot.forEach(function(doc) {
             copy = template
-            markup = copy.replace("{ID}", doc.id)
-            markup = markup.replace("{ID}", doc.id)
-            markup = markup.replace("{TEXT}", doc.data()['text'])
+            markup = template.replaceAll("{ID}", doc.id)
+            col = "warning"
+            done = "Nu e gata"
+            if (doc.data()['completed'] == true) {
+                col = "success"
+                done = "Gata"
+            }
+            markup = markup.replace("{COLOR}", col)
+            markup = markup.replace("{DONE}", done)
+            markup = markup.replaceAll("{TEXT}", doc.data()['text'])
             
             tasks_div.innerHTML += markup
         });
@@ -38,6 +45,16 @@ function show_tasks(template) {
             element.onclick = function() {
                 db.collection(user.uid).doc(element.id).delete()
                 document.getElementById('div' + element.id).remove()
+            }
+        });
+
+        docs = document.getElementsByClassName("completed")
+        Array.from(docs).forEach(element => {
+            element.onclick = function() {
+                done = (element.innerHTML == "Gata")?false:true
+                db.collection(user.uid).doc(element.id).update({
+                    'completed': done
+                }).then(get_template)
             }
         });
 
