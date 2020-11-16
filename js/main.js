@@ -6,10 +6,11 @@ pages = {
 window.onload = function() {
   console.log("starting app")
 
-  user = firebase.auth().currentUser
-  if (user) {
-    load('home')
-  } else load('auth')
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      load('home')
+    } else load('auth')
+  })
 }
 
 function start() {
@@ -78,4 +79,7 @@ function setError(err) {
 
 function numeste() {
   document.getElementById('text').innerHTML += firebase.auth().currentUser.email
+  document.getElementById('signout').onclick = function() {
+    firebase.auth().signOut()
+  }
 }
