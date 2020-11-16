@@ -1,16 +1,22 @@
+pages = {
+  'auth': ["/auth.html", start],
+  'home': ["/test.html", numeste]
+}
+
 window.onload = function() {
   console.log("starting app")
-  load("/login.html", start)
+
+  user = firebase.auth().currentUser
+  if (user) {
+    load('home')
+  } else load('auth')
 }
 
 function start() {
   document.getElementById("register").onclick = reg
   document.getElementById("login").onclick = login
-
-  user = firebase.auth().currentUser
-  if (user) {
-    console.log('e ;logat')
-    loadPage('/test.html', numeste)
+  document.getElementById("forgotPassword").onclick = function() {
+    setError("nu avem inca")
   }
 }
 
@@ -20,13 +26,12 @@ function reg() {
 
   firebase.auth().createUserWithEmailAndPassword(mail, pass)
     .then(function () {
-      load("/test.html", numeste)
+      load('home')
     })
     .catch(function(error) {
-      // Handle Errors here.
       var errorCode = error.code;
       var errorMessage = error.message;
-      setError(errorMessage)
+      setError()
     })
 
 }
@@ -37,25 +42,28 @@ function login() {
 
   firebase.auth().signInWithEmailAndPassword(mail, pass)
     .then(function () {
-      load("/test.html", numeste)
+      load('home')
     })
     .catch(function(error) {
       var errorCode = error.code;
       var errorMessage = error.message;
-      setError(errorMessage)
+      setError()
     })
 }
 
 
-function load(name, then_function) {
-  my_div = document.getElementById("app")
-  next_url = name
+function load(name) {
+  app = document.getElementById("app")
   xhttp = new XMLHttpRequest()
+
+  next_url = pages[name][0]
+  then_function = pages[name][1]
+  console.log(next_url)
 
   xhttp.onreadystatechange = function() {
     if (this.readyState === 4 && this.status === 200) {
-      my_div.innerHTML = this.responseText
-      then_function() 
+      app.innerHTML = this.responseText
+      then_function()
     }
   }
 
@@ -64,7 +72,8 @@ function load(name, then_function) {
 }
 
 function setError(err) {
-  document.getElementById('err').innerHTML = "ceva nu i bine frate"
+  if (!err) err = "cv nu i bine frate"
+  document.getElementById('err').innerHTML = err
 }
 
 function numeste() {
