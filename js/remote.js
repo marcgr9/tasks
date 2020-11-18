@@ -6,9 +6,17 @@ function add_task() {
             'completed': false,
             'zi': d.getDOY()
         })
-        .then(function () {
+        .then(function (docRef) {
             document.getElementById('task').value = ""
-            get_template()
+            tasks_g.push({
+                'data': {
+                    'text': txt,
+                    'completed': false,
+                    'zi': d.getDOY()
+                },
+                'id': docRef.id
+            })
+            show_tasks(tasks_g)
         })
         .catch(function(error) {
             console.log(error)
@@ -16,31 +24,32 @@ function add_task() {
     }
 }
 
+function show_tasks(tasks) {
+    values = {
+        true: {
+            '{COMPLETED}': 'Gata',
+            '{COLOR}': 'success'
+        },
+        false: {
+            '{COMPLETED}': 'Nu e gata',
+            '{COLOR}': 'warning'
+        },
+    }
 
-function show_tasks(template) {
     document.getElementById('taskuri').innerHTML = ""
-    db.collection(user.uid)
-    .where("zi", "==", zi)
-    .get()
-    .then(function(querySnapshot) {
-        tasks_div = document.getElementById("taskuri")
-        querySnapshot.forEach(function(doc) {
-            copy = template
-            markup = template.replaceAll("{ID}", doc.id)
-            col = "warning"
-            done = "Nu e gata"
-            if (doc.data()['completed'] == true) {
-                col = "success"
-                done = "Gata"
-            }
-            markup = markup.replace("{COLOR}", col)
-            markup = markup.replace("{DONE}", done)
-            markup = markup.replaceAll("{TEXT}", doc.data()['text'])
-            
-            tasks_div.innerHTML += markup
-        });
-        
+    tasks.forEach(task => {
+        html = template.replaceAll("{ID}", task.id)
 
+        for (const [key, value] of Object.entries(values[task.data['completed']])) {
+            html = html.replaceAll(key, value)
+        }
+
+        html = html.replaceAll("{TEXT}", task.data['text'])
+            
+        tasks_div.innerHTML += html
+    });
+        
+    if (zi == d.getDOY()) {
         docs = document.getElementsByClassName("del")
         Array.from(docs).forEach(element => {
             element.onclick = function() {
@@ -52,31 +61,48 @@ function show_tasks(template) {
         docs = document.getElementsByClassName("completed")
         Array.from(docs).forEach(element => {
             element.onclick = function() {
-                done = (element.innerHTML == "Gata")?false:true
-                db.collection(user.uid).doc(element.id).update({
-                    'completed': done
-                }).then(get_template)
+                change_task_status(element)
             }
         });
-        document.getElementById('table').style.display = "block"
-    })
-    .catch(function(error) {
-        console.log("eroare ", error)
+    }
+
+    document.getElementById('table').style.display = "block"
+}
+
+
+function change_task_status(element) {
+    gata = (element.className.includes("btn-success"))?true:false
+    db.collection(user.uid).doc(element.id).update({
+        'completed': !gata
+    }).then(function() {
+        classes = "completed btn btn-{COLOR}"
+        text = '{COMPLETED}'
+        for (const [key, value] of Object.entries(values[!gata])) {
+            classes = classes.replaceAll(key, value)
+            text = text.replaceAll(key, value)
+        }
+        
+        element.className = classes
+        element.innerText = text
+
     })
 }
 
 
 function get_template() {
-    xhttp = new XMLHttpRequest()
+    return new Promise(function (resolve, reject) {
+        xhttp = new XMLHttpRequest()
   
-    xhttp.onreadystatechange = function() {
-      if (this.readyState === 4 && this.status === 200) {
-        show_tasks(String(this.responseText))
-      }
-    }
-  
-    xhttp.open('GET', "/views/task.html", true)
-    xhttp.send()
+        xhttp.onreadystatechange = function() {
+          if (this.readyState === 4 && this.status === 200) {
+            resolve(this.responseText)
+          }
+        }
+      
+        xhttp.open('GET', href + "/views/task.html", true)
+        xhttp.send()
+    })
+    
 }
 
 function update_title(zi) {
@@ -97,4 +123,26 @@ function update_title(zi) {
     }
 
     elem.innerText = txt
+}
+
+
+function get_tasks(day) {
+    response = []
+
+    return db.collection(user.uid)
+    .where("zi", "==", day)
+    .get()
+    .then(function(querySnapshot) {
+        tasks_div = document.getElementById("taskuri")
+        querySnapshot.forEach(function(doc) {
+            response.push({
+                'data': doc.data(),
+                'id': doc.id
+            })
+        });
+        return response
+    })
+    .catch(function(err) {
+        console.log(err)
+    })
 }

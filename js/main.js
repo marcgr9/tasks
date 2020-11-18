@@ -1,4 +1,5 @@
 pages = {}
+href = ""
 
 window.onload = function() {
   console.log("starting app")
@@ -48,6 +49,11 @@ function login() {
     })
 }
 
+function setError(err) {
+  if (!err) err = "cv nu i bine frate"
+  document.getElementById('err').innerHTML = err
+}
+
 
 function load(name) {
   app = document.getElementById("app")
@@ -64,11 +70,6 @@ function load(name) {
     }
   }
 
-  xhttp.open('GET', next_url, true)
+  xhttp.open('GET', href + next_url, true)
   xhttp.send()
-}
-
-function setError(err) {
-  if (!err) err = "cv nu i bine frate"
-  document.getElementById('err').innerHTML = err
 }

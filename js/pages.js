@@ -17,25 +17,53 @@ function init_tasks() {
     }
 
     document.getElementById('plus').onclick = function() {
-        if (zi <= d.getDOY()) {
-            zi++
-            update_title(zi)
-            get_template()
-        }
+        setDay(zi+1)
     }
 
     document.getElementById('minus').onclick = function() {
-        if (zi > 0) {
-            zi--;
-            update_title(zi)
-            get_template()
-        }
+        setDay(zi-1)
     }
 
-    get_template()
-    document.getElementById('addTask').onclick = add_task
+    template = ""
+    get_template().then(function(result) {
+        template = result
+        display_tasks()
+    });
 
+    document.getElementById('addTask').onclick = function() {
+        if (zi == d.getDOY()) add_task()
+        else {
+            document.getElementById('err').innerText = "Nu poti adauga task-uri in aceasta zi"
+            promise = new Promise(function (resolve) {
+                setTimeout(function() {
+                    resolve('')
+                }, 3000)
+            })
+            promise.then(function() {
+                document.getElementById('err').innerText = ""
+            })
+        }
+    }
 }
+
+
+function setDay(day) {
+    if (day > 0 && day <= zi + 1) {
+        zi = day
+        update_title(zi)
+        display_tasks()
+    }
+}
+
+
+function display_tasks() {
+    tasks_g = []
+    get_tasks(zi).then(function(tasks) {
+        tasks_g = tasks
+        show_tasks(tasks)
+    })
+}
+
 
 Date.prototype.isLeapYear = function() {
     var year = this.getFullYear();
