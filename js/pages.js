@@ -31,9 +31,9 @@ function init_tasks() {
     });
 
     document.getElementById('addTask').onclick = function() {
-        if (zi == d.getDOY()) add_task()
+        if (zi == d.getDOY() || zi == d.getDOY()+6) add_task(zi)
         else {
-            document.getElementById('err').innerText = "Nu poti adauga task-uri in aceasta zi"
+            document.getElementById('err').innerText = "Poti adauga task-uri doar pentru azi sau zilele viitoare"
             promise = new Promise(function (resolve) {
                 setTimeout(function() {
                     resolve('')
@@ -48,7 +48,7 @@ function init_tasks() {
 
 
 function setDay(day) {
-    if (day > 0 && day <= zi + 1) {
+    if (day > 0 && day <= d.getDOY() + 6) {
         zi = day
         update_title(zi)
         display_tasks()

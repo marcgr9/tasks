@@ -1,10 +1,10 @@
-function add_task() {
+function add_task(day) {
     txt = document.getElementById('task').value
     if (txt) {
         db.collection(user.uid).add({
             'text': txt,
             'completed': false,
-            'zi': d.getDOY()
+            'zi': day
         })
         .then(function (docRef) {
             document.getElementById('task').value = ""
@@ -12,7 +12,7 @@ function add_task() {
                 'data': {
                     'text': txt,
                     'completed': false,
-                    'zi': d.getDOY()
+                    'zi': day
                 },
                 'id': docRef.id
             })
