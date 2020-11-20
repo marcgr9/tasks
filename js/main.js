@@ -1,12 +1,12 @@
 pages = {}
 href = ""
 
-window.onload = function() {
+window.onload = () => {
   console.log("starting app")
 
   pages = {
     'auth': ["/views/auth.html", init_auth],
-    'home': ["/views/test.html", init_tasks]
+    'home': ["/views/tasks.html", init_tasks]
   }
 
   firebase.auth().onAuthStateChanged((user) => {
@@ -16,7 +16,7 @@ window.onload = function() {
   })
 }
 
-function start() {
+const start = () => {
   document.getElementById("register").onclick = reg
   document.getElementById("login").onclick = login
   document.getElementById("forgotPassword").onclick = function() {
@@ -24,7 +24,7 @@ function start() {
   }
 }
 
-function reg() {
+const reg = () => {
   mail = document.getElementById("mail").value
   pass = document.getElementById("pass").value
 
@@ -37,7 +37,7 @@ function reg() {
 
 }
 
-function login() {
+const login = () => {
   mail = document.getElementById("mail").value
   pass = document.getElementById("pass").value
 
@@ -49,13 +49,15 @@ function login() {
     })
 }
 
-function setError(err) {
-  if (!err) err = "cv nu i bine frate"
-  document.getElementById('err').innerHTML = err
+const init_auth = () => {
+  document.getElementById("register").onclick = reg
+  document.getElementById("login").onclick = login
+  document.getElementById("forgotPassword").onclick = function() {
+    setError("nu avem inca")
+  }
 }
 
-
-function load(name) {
+const load = (name) => {
   app = document.getElementById("app")
   xhttp = new XMLHttpRequest()
 
